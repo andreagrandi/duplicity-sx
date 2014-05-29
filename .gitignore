@@ -1,0 +1,4 @@
+.bzr
+.bzrignore
+build
+duplicity.egg-info
