@@ -29,10 +29,14 @@ from duplicity import tempdir
 class SXBackend(duplicity.backend.Backend):
     """Connect to remote store using Skylable Protocol"""
     def __init__(self, parsed_url):
-        pass
+        duplicity.backend.Backend.__init__(self, parsed_url)
+        self.parsed_url = parsed_url
+        self.url_string = duplicity.backend.strip_auth_from_url(self.parsed_url)
 
     def _put(self, source_path, remote_filename):
-        pass
+        remote_path = os.path.join(urllib.unquote(self.parsed_url.path.lstrip('/')), remote_filename).rstrip()
+        commandline = "sxcp -r {0} {1}".format(source_path.name, remote_path)
+        self.subprocess_popen(commandline)
 
     def _get(self, remote_filename, local_path):
         pass
