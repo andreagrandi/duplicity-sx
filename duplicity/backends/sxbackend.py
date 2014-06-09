@@ -40,7 +40,9 @@ class SXBackend(duplicity.backend.Backend):
         self.subprocess_popen(commandline)
 
     def _get(self, remote_filename, local_path):
-        pass
+        remote_path = os.path.join(urllib.unquote(self.parsed_url.path), remote_filename).rstrip()
+        commandline = "sxcp -r {0} {1}".format(remote_path, local_path.name)
+        self.subprocess_popen(commandline)
 
     def _list(self):
         pass
