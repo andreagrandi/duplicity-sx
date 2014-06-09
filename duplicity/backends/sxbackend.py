@@ -34,7 +34,8 @@ class SXBackend(duplicity.backend.Backend):
         self.url_string = duplicity.backend.strip_auth_from_url(self.parsed_url)
 
     def _put(self, source_path, remote_filename):
-        remote_path = os.path.join(urllib.unquote(self.parsed_url.path.lstrip('/')), remote_filename).rstrip()
+        remote_path = os.path.join(urllib.unquote(self.parsed_url.path.lstrip('/')), 
+            remote_filename).rstrip()
         commandline = "sxcp -r {0} {1}".format(source_path.name, remote_path)
         self.subprocess_popen(commandline)
 
@@ -45,6 +46,7 @@ class SXBackend(duplicity.backend.Backend):
         pass
 
     def _delete(self, filename):
-        pass
+        commandline = "sxrm {0}/{1}".format(self.url_string, filename)
+        self.subprocess_popen(commandline)
 
 duplicity.backend.register_backend("sx", SXBackend)
