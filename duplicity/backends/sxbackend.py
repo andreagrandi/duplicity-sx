@@ -20,11 +20,7 @@
 
 import os.path
 import urllib
-
 import duplicity.backend
-from duplicity import globals
-from duplicity import log
-from duplicity import tempdir
 
 class SXBackend(duplicity.backend.Backend):
     """Connect to remote store using Skylable Protocol"""
@@ -45,7 +41,11 @@ class SXBackend(duplicity.backend.Backend):
         self.subprocess_popen(commandline)
 
     def _list(self):
-        pass
+        # Do a long listing to avoid connection reset
+        commandline = "sxls -r {0}".format(self.url_string)
+        _, l, _ = self.subprocess_popen(commandline)
+        # Look for our files as the last element of a long list line
+        return [x.split()[-1] for x in l.split('\n') if x and not x.startswith("total ")]
 
     def _delete(self, filename):
         commandline = "sxrm {0}/{1}".format(self.url_string, filename)
