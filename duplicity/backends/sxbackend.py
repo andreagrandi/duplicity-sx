@@ -19,24 +19,21 @@
 # Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
 import os.path
-import urllib
 import duplicity.backend
 
 class SXBackend(duplicity.backend.Backend):
     """Connect to remote store using Skylable Protocol"""
     def __init__(self, parsed_url):
         duplicity.backend.Backend.__init__(self, parsed_url)
-        self.parsed_url = parsed_url
-        self.url_string = duplicity.backend.strip_auth_from_url(self.parsed_url)
+        self.url_string = parsed_url.url_string
 
     def _put(self, source_path, remote_filename):
-        remote_path = os.path.join(urllib.unquote(self.parsed_url.path.lstrip('/')), 
-            remote_filename).rstrip()
+        remote_path = os.path.join(self.url_string, remote_filename)
         commandline = "sxcp -r {0} {1}".format(source_path.name, remote_path)
         self.subprocess_popen(commandline)
 
     def _get(self, remote_filename, local_path):
-        remote_path = os.path.join(urllib.unquote(self.parsed_url.path), remote_filename).rstrip()
+        remote_path = os.path.join(self.url_string, remote_filename)
         commandline = "sxcp -r {0} {1}".format(remote_path, local_path.name)
         self.subprocess_popen(commandline)
 
