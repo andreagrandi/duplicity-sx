@@ -2,3 +2,4 @@
 .bzrignore
 build
 duplicity.egg-info
+*.pyc
