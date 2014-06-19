@@ -29,7 +29,7 @@ class SXBackend(duplicity.backend.Backend):
 
     def _put(self, source_path, remote_filename):
         remote_path = os.path.join(self.url_string, remote_filename)
-        commandline = "sxcp -r {0} {1}".format(source_path.name, remote_path)
+        commandline = "sxcp {0} {1}".format(source_path.name, remote_path)
         self.subprocess_popen(commandline)
 
     def _get(self, remote_filename, local_path):
