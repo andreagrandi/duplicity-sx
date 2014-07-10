@@ -52,6 +52,7 @@ class ManualBackendBase(BackendInstanceBase):
     def setUp(self):
         super(ManualBackendBase, self).setUp()
         self.set_global('num_retries', 1)
+        self.set_global('ssl_no_check_certificate', True)
         self.setBackendInfo()
         if self.password is not None:
             self.set_environ("FTP_PASSWORD", self.password)
@@ -221,6 +222,12 @@ class gioFTPTest(ManualBackendBase):
     def setBackendInfo(self):
         self.url_string = 'gio+' + config.ftp_url if config.ftp_url else None
         self.password = config.ftp_password
+
+
+class copyTest(ManualBackendBase):
+    def setBackendInfo(self):
+        self.url_string = config.copy_url
+        self.password = config.copy_password
 
 
 if __name__ == "__main__":

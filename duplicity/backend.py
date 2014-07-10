@@ -80,7 +80,8 @@ uses_netloc = ['ftp',
                'gdocs',
                'http', 'https',
                'imap', 'imaps',
-               'mega']
+               'mega',
+               'copy']
 
 
 def import_backends():
@@ -538,10 +539,10 @@ class BackendWrapper(object):
         """Retrieve remote_filename and place in local_path"""
         if hasattr(self.backend, '_get'):
             self.backend._get(remote_filename, local_path)
+            local_path.setdata()
             if not local_path.exists():
                 raise BackendException(_("File %s not found locally after get "
                                          "from backend") % util.ufn(local_path.name))
-            local_path.setdata()
         else:
             raise NotImplementedError()
 

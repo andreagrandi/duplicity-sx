@@ -1,3 +1,36 @@
+2014-06-28  Kenneth Loafman  <kenneth@loafman.com>
+
+    * Merged in lp:~3v1n0/duplicity/copy.com-backend
+      - I've added a backend for Copy.com cloud storage, this supports all the
+        required operations and works as it should from my tests.
+      - You can use it by calling duplicity with something like:
+        copy://account@email.com:your-password@copy.com/duplicity
+      - The only thing I've concerns with is the optimized support for _delete_list
+        which can't be enabled here because the test_delete_list tries also to
+        delete a not-existing files, and it requires the backend not to raise an
+        exception in that case (is this somewhat wanted or could we do the same as
+        for _delete or _query?)
+    * Merged in lp:~ed.so/duplicity/webdav200fix-0.7
+      - webdav backend fix "BackendException: Bad status code 200 reason OK. " when
+        restarting an interrupted backup and overwriting partially uploaded volumes.
+    * Merged in lp:~mterry/duplicity/webdav-fixes
+      - This branch fixes two issues I saw when testing the webdav backend:
+      - 1) Errors like the following: "Attempt 1 failed. BackendException: File
+        /tmp/duplicity-LQ1a0i-tempdir/mktemp-u2aiyX-2 not found locally after get
+        from backend".  These were caused by the _get() method not calling setdata()
+        on the local path object, so the rest of the code thought it didn't exist.
+      - 2) Some odd issues from stale responses/data. We have a couple places in
+        webdavbackend.py where we close the connection before making a request
+        because of this problem. But I've changed it to do it every time, more
+        reliably, by putting a _close() call inside the request() method.
+      - With this, the webdav backend seems fine to me.
+    * Merged in lp:~antmak/duplicity/0.7-par2-fix
+      - Useful fix for verbatim par2cmdline options (like "-t" in par2-tbb version)
+    * Fixed bug 1327550: OverflowError: signed integer is greater than maximum
+      - Major and minor device numbers are supposed to be one byte each.  Someone
+        has crafted a special system image using OpenVZ where the major and minor
+        device numbers are much larger (ploop devices).  We treat them as (0,0).
+
 2014-05-11  Kenneth Loafman  <kenneth@loafman.com>
 
     * Merged in lp:~mterry/duplicity/py2.6.0
