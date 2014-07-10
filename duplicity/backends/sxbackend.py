@@ -33,7 +33,6 @@ class SXBackend(duplicity.backend.Backend):
         self.subprocess_popen(commandline)
 
     def _get(self, remote_filename, local_path):
-        #import ipdb; ipdb.set_trace()
         remote_path = os.path.join(self.url_string, remote_filename)
         commandline = "sxcp {0} {1}".format(remote_path, local_path.name)
         self.subprocess_popen(commandline)
