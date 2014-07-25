@@ -3,3 +3,5 @@
 build
 duplicity.egg-info
 *.pyc
+.c9
+duplicity/_librsync.so
